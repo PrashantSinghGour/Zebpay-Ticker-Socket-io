@@ -1,0 +1,33 @@
+<div class="backgroud col-12">
+  <table class="table table-font">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col">High</th>
+        <th scope="col">Low</th>
+        <th scope="col">Buy</th>
+        <th scope="col">Sell</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of prices; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>
+          <span class="d-flex coin-name">
+            <span><img class="coin-logo" [src]="item?.url" alt="item?.code" /></span>
+            <span> {{ item?.coinData?.tradeTypeFullName || item?.code }}</span>
+          </span>
+        </td>
+        <td>{{ item?.high24hr | currency: 'INR':'symbol':'1.0-9' }}</td>
+        <td>{{ item?.low24hr | currency: 'INR':'symbol':'1.0-9' }}</td>
+        <td class="text-green">
+          {{ item?.topBuy | currency: 'INR':'symbol':'1.0-9' }}
+        </td>
+        <td class="text-red">
+          {{ item?.topSell | currency: 'INR':'symbol':'1.0-9' }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
