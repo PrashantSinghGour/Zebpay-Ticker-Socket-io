@@ -3,11 +3,11 @@
     <thead>
       <tr>
         <th scope="col"></th>
-        <th scope="col" class="text-center">Name</th>
-        <th scope="col" class="text-center">High</th>
-        <th scope="col" class="text-center">Low</th>
-        <th scope="col" class="text-center">Buy</th>
-        <th scope="col" class="text-center">Sell</th>
+        <th scope="col" class="text-right">Name</th>
+        <th scope="col" class="text-right">High</th>
+        <th scope="col" class="text-right">Low</th>
+        <th scope="col" class="text-right">Buy</th>
+        <th scope="col" class="text-right">Sell</th>
       </tr>
     </thead>
     <tbody>
@@ -19,7 +19,7 @@
           </svg>
         </td>
         <td>
-          <span class="d-flex coin-name justify-content-end">
+          <span class="d-flex coin-name justify-content-between">
             <span><img class="coin-logo" [src]="item?.url" alt="item?.code" /></span>
             <span> {{ item?.tradeTypeFullName || item?.code }}</span>
           </span>
