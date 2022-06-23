@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HapticService } from './haptic.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +20,10 @@ export class ThemeService {
     'text-red': '#ff4645',
   };
   private themeWrapper = document.querySelector('body');
-  constructor() { }
+  constructor(private haptic: HapticService) { }
 
   setTheme(isDark = false) {
+    this.haptic.vibrate(50);
     if (isDark) {
       Object.keys(this.darkTheme).forEach((key) => {
         const value = this.darkTheme[key];

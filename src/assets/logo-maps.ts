@@ -19,6 +19,8 @@ export const logoMaps: any = {
   XRP: 'https://s2.coinmarketcap.com/static/img/coins/64x64/52.png',
   SOL: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png',
   DOGE: 'https://s2.coinmarketcap.com/static/img/coins/64x64/74.png',
+  DATA: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2143.png',
+  BTTC: 'https://cdn.coindcx.com/static/coins/bttc.svg',
   PUSH: 'https://s2.coinmarketcap.com/static/img/coins/64x64/9111.png',
   DOT: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
   DAI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png',

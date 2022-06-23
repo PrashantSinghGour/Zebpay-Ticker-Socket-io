@@ -3,29 +3,34 @@
     <thead>
       <tr>
         <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col">High</th>
-        <th scope="col">Low</th>
-        <th scope="col">Buy</th>
-        <th scope="col">Sell</th>
+        <th scope="col" class="text-center">Name</th>
+        <th scope="col" class="text-center">High</th>
+        <th scope="col" class="text-center">Low</th>
+        <th scope="col" class="text-center">Buy</th>
+        <th scope="col" class="text-center">Sell</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of prices; let i = index">
-        <th scope="row">{{ i + 1 }}</th>
+        <td scope="row" class="text-center" [ngClass]="{'bookmarked': item?.isBookmarked}" (click)="setBookmark(i)">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path d="M352 48H160a48 48 0 00-48 48v368l144-128 144 128V96a48 48 0 00-48-48z" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
+          </svg>
+        </td>
         <td>
           <span class="d-flex coin-name">
             <span><img class="coin-logo" [src]="item?.url" alt="item?.code" /></span>
-            <span> {{ item?.coinData?.tradeTypeFullName || item?.code }}</span>
+            <span> {{ item?.tradeTypeFullName || item?.code }}</span>
           </span>
         </td>
-        <td>{{ item?.high24hr | currency: 'INR':'symbol':'1.0-9' }}</td>
-        <td>{{ item?.low24hr | currency: 'INR':'symbol':'1.0-9' }}</td>
-        <td class="text-green">
-          {{ item?.topBuy | currency: 'INR':'symbol':'1.0-9' }}
+        <td class="text-right">{{ item?.prices?.high24hr | currency: 'INR':'symbol':'1.0-9' }}</td>
+        <td class="text-right">{{ item?.prices?.low24hr | currency: 'INR':'symbol':'1.0-9' }}</td>
+        <td class="text-green text-right ">
+          {{ item?.prices?.topBuy | currency: 'INR':'symbol':'1.0-9' }}
         </td>
-        <td class="text-red">
-          {{ item?.topSell | currency: 'INR':'symbol':'1.0-9' }}
+        <td class="text-red text-right">
+          {{ item?.prices?.topSell | currency: 'INR':'symbol':'1.0-9' }}
         </td>
       </tr>
     </tbody>

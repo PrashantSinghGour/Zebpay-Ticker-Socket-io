@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EventService } from 'src/app/services/event.service';
+import { HapticService } from 'src/app/services/haptic.service';
 import { MainService } from 'src/app/services/main.service';
 import { logoMaps } from 'src/assets/logo-maps';
 import { LoaderService } from '../loader/loader.service';
@@ -11,19 +12,28 @@ import { LoaderService } from '../loader/loader.service';
   templateUrl: './price.component.html',
   styleUrls: ['./price.component.css']
 })
-export class PriceComponent implements OnInit {
-  public subscription: Subscription | undefined;
+export class PriceComponent implements OnInit, OnDestroy {
+  public priceUpdateSubscription: Subscription | undefined;
+  public priceLoadedSubscription: Subscription | undefined;
   prices: any[] = [];
   constructor(
     private eventService: EventService,
     private mainService: MainService,
     private httpClient: HttpClient,
-    private loader: LoaderService
+    private loader: LoaderService,
+    private haptic: HapticService
   ) { }
 
   ngOnInit() {
-    this.fetchTradePairs();
-    this.subscription = this.eventService.subscribe(
+
+    // all prices subscriptions
+    this.priceLoadedSubscription = this.eventService.subscribe(this.eventService.eventNames.TICKERVALUELOADED, () => {
+      this.prices = this.mainService.tradePair;
+      this.sortPrices();
+    });
+
+    // prices update subscriptions
+    this.priceUpdateSubscription = this.eventService.subscribe(
       this.eventService.eventNames.TICKERVALUEUPDATED,
       (res: any) => {
         const code = res.tickerRecord.split('/')[1].split('-')[0];
@@ -33,55 +43,47 @@ export class PriceComponent implements OnInit {
         if (exist > -1) {
           this.prices[exist] = {
             code,
-            coinData: this.mainService.tradePairsWithCode[code],
             url: logoMaps[code],
-            ...res.data,
+            prices: res.data,
           };
         } else {
           this.prices.push({
             code,
-            coinData: this.mainService.tradePairsWithCode[code],
+            isBookmarked: false,
             url: logoMaps[code],
-            ...res.data,
+            prices: res.data,
           });
         }
 
-        this.prices = this.prices.sort((a, b) => b.topBuy - a.topBuy);
+        this.sortPrices();
       }
     );
   }
 
-  fetchTradePairs() {
-    this.httpClient
-      .get('https://www.zebapi.com/pro/v1/market')
-      .toPromise()
-      .then((res: any) => {
-        this.prices =
-          (res &&
-            res.length &&
-            res.map((item: any) => {
-              item.code = item.pair; //MATIC-INR
-              item.url = logoMaps[item.virtualCurrency];
-              item.topBuy = item.buy;
-              item.topSell = item.sell;
-              item.high24hr = item['24hoursHigh'];
-              item.low24hr = item['24hoursLow'];
-              item.coinData =
-                this.mainService.tradePairsWithCode[item.virtualCurrency];
-              return item;
-            })) ||
-          [];
-        if (this.prices.length) {
-          this.prices = this.prices.filter(
-            (item: any) => item.currency === 'INR' && item.topBuy
-          );
-          this.prices = this.prices.sort((a, b) => b.topBuy - a.topBuy);
-          this.prices = this.prices.slice(0, 50);
-          console.log(this.prices);
-        }
-      })
-      .catch((error: any) => {
-        console.error(error);
-      });
+  ngOnDestroy(): void {
+    const _that: any = this;
+    ['priceLoadedSubscription', 'priceUpdateSubscription'].forEach((subscription: string) => {
+      if (_that[subscription]) {
+        (_that[subscription] as Subscription).unsubscribe();
+      }
+    });
+  }
+
+  setBookmark(index: number) {
+    this.haptic.vibrate(50);
+    let bookmarks: string[] = [];
+    this.prices[index].isBookmarked = !this.prices[index].isBookmarked;
+    this.prices.forEach((price: any) => {
+      if (price.isBookmarked) {
+        bookmarks.push(price.code);
+      }
+    });
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    this.sortPrices();
+  }
+
+  sortPrices() {
+    this.prices = this.prices.sort((a, b) => b?.prices?.topBuy - a?.prices?.topBuy);
+    this.prices = this.prices.sort((a, b) => b?.isBookmarked - a?.isBookmarked);
   }
 }

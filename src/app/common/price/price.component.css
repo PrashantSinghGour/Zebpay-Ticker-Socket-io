@@ -14,3 +14,49 @@ thead,
 tr {
   color: var(--text-black);
 }
+
+ tr td:first-child,
+ tr th:first-child {
+  width: 3rem;
+}
+
+tr {
+width: 100%;
+display: inline-table;
+table-layout: fixed;
+}
+
+table{
+ height:100vh;              
+ display: block;
+}
+
+tbody{
+  overflow-y: scroll;      
+  height: 100vh;            
+  width: 100%;
+  position: absolute;
+}
+
+  td svg {
+  width: 1.2rem !important;
+}
+
+.bookmarked svg path {
+ fill: orange !important;
+}
+
+@media screen and (max-width: 425px) {
+   tr td:first-child,
+ tr th:first-child {
+  width: 2rem;
+ }
+  td {
+    word-wrap: break-word;
+    width: 3rem;
+  }
+
+
+}
+
+
