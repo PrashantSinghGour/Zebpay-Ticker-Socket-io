@@ -25,8 +25,8 @@ export class Feeds {
 
     client.on('connectionStateChanged', (connectionState: any) => {
       //https://deepstream.io/tutorials/concepts/connectivity/#connection-states
-
-      console.log('connectionState', connectionState);
+      //temp
+      // console.log('connectionState', connectionState);
       // will be called with 'CLOSED' once the connection is successfully closed.
     });
 

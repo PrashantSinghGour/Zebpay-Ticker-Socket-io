@@ -33,7 +33,6 @@ export class AppComponent {
       .toPromise().then((res: any) => {
         res = res && res.length && res.filter((price: any) => price?.currency === 'INR' && +price?.buy);
         marketPricePairs = keyBy(res, 'virtualCurrency');
-        console.log("🚀 ~ file: app.component.ts ~ line 32 ~ AppComponent ~ .toPromise ~ res", res)
         return this.httpClient
           .get('https://www.zebapi.com/api/v1/tradepairs/IN')
           .toPromise();
@@ -50,7 +49,6 @@ export class AppComponent {
         });
 
         tradePair = tradePair.filter((pair: any) => pair?.prices && pair?.tradeDenominationCurrency === 'INR');
-        console.log("🚀 ~ file: app.component.ts ~ line 43 ~ AppComponent ~ .toPromise ~ tradePair", tradePair)
 
 
         this.mainService.tradePairsWithCode = keyBy(
@@ -64,10 +62,6 @@ export class AppComponent {
         this.eventService.broadcast(
           this.eventService.eventNames.TICKERVALUELOADED,
           {}
-        );
-        console.log(
-          'tradePairsWithCode - ',
-          this.mainService.tradePairsWithCode
         );
       });
   }
