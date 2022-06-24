@@ -4,8 +4,9 @@
       <tr>
         <th scope="col"></th>
         <th scope="col" class="text-right">Name</th>
-        <th scope="col" class="text-right">High</th>
-        <th scope="col" class="text-right">Low</th>
+        <th scope="col" class="text-right" *ngIf="screenWidth && screenWidth > 425">High</th>
+        <th scope="col" class="text-right" *ngIf="screenWidth && screenWidth > 425">Low</th>
+        <th scope="col" class="text-right" *ngIf="screenWidth && screenWidth <= 425">High / Low</th>
         <th scope="col" class="text-right">Buy</th>
         <th scope="col" class="text-right">Sell</th>
       </tr>
@@ -20,12 +21,29 @@
         </td>
         <td>
           <span class="d-flex coin-name justify-content-between">
-            <span><img class="coin-logo" [src]="item?.url" alt="item?.code" /></span>
-            <span> {{ item?.tradeTypeFullName || item?.code }}</span>
+            <span [title]="item?.code" data-toggle="tooltip" data-placement="right"><img class="coin-logo"
+                [src]="item?.url" alt="item?.code" /></span>
+            <span>{{ coinNameFormat(item) || item?.code }}</span>
           </span>
         </td>
-        <td class="text-right">{{ item?.prices?.high24hr | currency: 'INR':'symbol':'1.0-9' }}</td>
-        <td class="text-right">{{ item?.prices?.low24hr | currency: 'INR':'symbol':'1.0-9' }}</td>
+
+        <td *ngIf="screenWidth && screenWidth <= 425">
+          <span class="d-flex flex-column justify-content-center">
+            <span class="mb-1">{{ item?.prices?.high24hr | currency:
+              'INR':'symbol':'1.0-9'
+              }}</span>
+            <span class="mt-1">{{ item?.prices?.low24hr | currency:
+              'INR':'symbol':'1.0-9'
+              }}</span>
+          </span>
+        </td>
+
+        <td class="text-right" *ngIf="screenWidth && screenWidth > 425">{{ item?.prices?.high24hr | currency:
+          'INR':'symbol':'1.0-9'
+          }}</td>
+        <td class="text-right" *ngIf="screenWidth && screenWidth > 425">{{ item?.prices?.low24hr | currency:
+          'INR':'symbol':'1.0-9'
+          }}</td>
         <td class="text-green text-right ">
           {{ item?.prices?.topBuy | currency: 'INR':'symbol':'1.0-9' }}
         </td>

@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EventService } from 'src/app/services/event.service';
 import { HapticService } from 'src/app/services/haptic.service';
 import { MainService } from 'src/app/services/main.service';
+import { coinNameFormat } from 'src/app/utils/formatter';
 import { logoMaps } from 'src/assets/logo-maps';
 import { LoaderService } from '../loader/loader.service';
 
@@ -15,21 +15,31 @@ import { LoaderService } from '../loader/loader.service';
 export class PriceComponent implements OnInit, OnDestroy {
   public priceUpdateSubscription: Subscription | undefined;
   public priceLoadedSubscription: Subscription | undefined;
+  public screenWidth: number | undefined;
+  public coinNameFormat = coinNameFormat
   prices: any[] = [];
   constructor(
     private eventService: EventService,
     private mainService: MainService,
-    private httpClient: HttpClient,
-    private loader: LoaderService,
-    private haptic: HapticService
-  ) { }
+    private haptic: HapticService,
+    private loader: LoaderService
+  ) {
+    this.getScreenSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize(event?: any) {
+    this.screenWidth = window.innerWidth;
+    console.log(this.screenWidth);
+  }
 
   ngOnInit() {
-
+    this.loader.show();
     // all prices subscriptions
     this.priceLoadedSubscription = this.eventService.subscribe(this.eventService.eventNames.TICKERVALUELOADED, () => {
       this.prices = this.mainService.tradePair;
       this.sortPrices();
+      this.loader.hide();
     });
 
     // prices update subscriptions
@@ -42,9 +52,11 @@ export class PriceComponent implements OnInit, OnDestroy {
         );
         if (exist > -1) {
           this.prices[exist] = {
+            ...this.prices[exist],
             code,
             url: logoMaps[code],
             prices: res.data,
+
           };
         } else {
           this.prices.push({

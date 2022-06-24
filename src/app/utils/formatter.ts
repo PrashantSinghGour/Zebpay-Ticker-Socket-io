@@ -12,4 +12,8 @@ const formatMarketPrice = (priceData: any) => {
   return price;
 }
 
-export { formatMarketPrice };
+const coinNameFormat = (coin: any) => {
+  return (coin.tradeTypeFullName as string).split('-')[0]
+}
+
+export { formatMarketPrice, coinNameFormat };

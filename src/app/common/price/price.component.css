@@ -3,7 +3,6 @@
   width: 1.6rem;
   border-radius: 0.75rem;
   border: 2px solid var(--text-black);
-  margin-right: 0.5rem;
 }
 
 tbody,
@@ -55,8 +54,6 @@ tbody{
     word-wrap: break-word;
     width: 3rem;
   }
-
-
 }
 
 

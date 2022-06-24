@@ -22,8 +22,11 @@ export class AppComponent {
   ) { }
 
   ngOnInit() {
+    const isDark: string = localStorage.getItem('isDark') || '';
+    const isDarkTheme = JSON.parse(isDark);
+    this.isDark = isDarkTheme;
+    this.theme.setTheme(isDarkTheme);
     this.getPairs();
-    this.theme.setTheme();
   }
 
   getPairs() {
@@ -56,9 +59,9 @@ export class AppComponent {
           'tradeVolumeCurrency'
         );
 
+        this.mainService.tradePair = tradePair;
         const feeds = new Feeds(this.eventService, this.mainService);
         feeds.getFeeds();
-        this.mainService.tradePair = tradePair;
         this.eventService.broadcast(
           this.eventService.eventNames.TICKERVALUELOADED,
           {}

@@ -58,7 +58,7 @@ td {
     flex-direction: column !important;
   }
   .coin-name span {
-    text-align: left;
+    text-align: center;
   }
 
   svg {

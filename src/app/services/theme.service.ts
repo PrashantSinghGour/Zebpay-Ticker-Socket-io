@@ -24,6 +24,7 @@ export class ThemeService {
 
   setTheme(isDark = false) {
     this.haptic.vibrate(50);
+    localStorage.setItem('isDark', JSON.stringify(isDark));
     if (isDark) {
       Object.keys(this.darkTheme).forEach((key) => {
         const value = this.darkTheme[key];
