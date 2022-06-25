@@ -7,6 +7,7 @@ import { keyBy } from 'lodash';
 import { Feeds } from './utils/feeds';
 import { logoMaps } from 'src/assets/logo-maps';
 import { formatMarketPrice } from './utils/formatter';
+import { initializeFirebase } from './utils/firebase';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -22,8 +23,9 @@ export class AppComponent {
   ) { }
 
   ngOnInit() {
+    initializeFirebase();
     const isDark: string = localStorage.getItem('isDark') || '';
-    const isDarkTheme = JSON.parse(isDark);
+    const isDarkTheme = isDark ? JSON.parse(isDark) : false;
     this.isDark = isDarkTheme;
     this.theme.setTheme(isDarkTheme);
     this.getPairs();
