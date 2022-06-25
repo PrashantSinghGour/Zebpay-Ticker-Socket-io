@@ -1,5 +1,5 @@
 # ZebpayTicker
-Angular v14 cryptocurrency ticker project, Based on Zebpay market apis.
+Angular v14 cryptocurrency ticker PWA(Progressive Web App), Based on Zebpay market apis.
 
 # Project demo
 https://zebpay-ticker.web.app
