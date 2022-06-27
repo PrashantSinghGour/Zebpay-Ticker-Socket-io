@@ -38,12 +38,11 @@ const showLocalNotification = async (title: any, body: any) => {
 
 const initializeNotification = async () => {
   check();
-  const swRegistration = await registerServiceWorker();
   const permission = await requestNotificationPermission();
-  const interval = setInterval(() => {
-    // showLocalNotification('This is title', 'this is the message');
-    clearInterval(interval);
-  }, 1000);
+  // const interval = setInterval(() => {
+  //   showLocalNotification('This is title', 'this is the message');
+  //   clearInterval(interval);
+  // }, 1000 * 60 * 5);
 }
 
 
