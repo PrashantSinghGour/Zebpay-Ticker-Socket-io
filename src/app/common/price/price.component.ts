@@ -43,7 +43,7 @@ export class PriceComponent implements OnInit, OnDestroy {
       this.loader.hide();
     });
 
-    const notification = new NotificationUpdate();
+    const notification = NotificationUpdate.getInstance();
 
     // prices update subscriptions
     this.priceUpdateSubscription = this.eventService.subscribe(
