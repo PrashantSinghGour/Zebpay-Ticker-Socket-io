@@ -4,6 +4,7 @@ import { EventService } from 'src/app/services/event.service';
 import { HapticService } from 'src/app/services/haptic.service';
 import { MainService } from 'src/app/services/main.service';
 import { coinNameFormat } from 'src/app/utils/formatter';
+import { NotificationUpdate } from 'src/app/utils/notification';
 import { logoMaps } from 'src/assets/logo-maps';
 import { LoaderService } from '../loader/loader.service';
 
@@ -42,6 +43,8 @@ export class PriceComponent implements OnInit, OnDestroy {
       this.loader.hide();
     });
 
+    const notification = new NotificationUpdate();
+
     // prices update subscriptions
     this.priceUpdateSubscription = this.eventService.subscribe(
       this.eventService.eventNames.TICKERVALUEUPDATED,
@@ -66,10 +69,22 @@ export class PriceComponent implements OnInit, OnDestroy {
             prices: res.data,
           });
         }
-
+        notification.checkPeaks(this.prices[exist]);
         this.sortPrices();
       }
     );
+  }
+
+  toggleNotification(index: number) {
+    this.haptic.vibrate(50);
+    let notifications: string[] = [];
+    this.prices[index].isNotification = !this.prices[index].isNotification;
+    this.prices.forEach((price: any) => {
+      if (price.isNotification) {
+        notifications.push(price.code);
+      }
+    });
+    localStorage.setItem('notifications', JSON.stringify(notifications));
   }
 
   ngOnDestroy(): void {

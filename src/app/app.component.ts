@@ -8,6 +8,7 @@ import { Feeds } from './utils/feeds';
 import { logoMaps } from 'src/assets/logo-maps';
 import { formatMarketPrice } from './utils/formatter';
 import { initializeFirebase } from './utils/firebase';
+import { initializeNotification } from './services/service-worker';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,6 +24,7 @@ export class AppComponent {
   ) { }
 
   ngOnInit() {
+    initializeNotification();
     initializeFirebase();
     const isDark: string = localStorage.getItem('isDark') || '';
     const isDarkTheme = isDark ? JSON.parse(isDark) : false;
@@ -44,10 +46,12 @@ export class AppComponent {
       }).then((res: any) => {
         let tradePair: any[] = [];
         let bookmarks: string[] = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+        let notifications: string[] = JSON.parse(localStorage.getItem('notifications') || '[]');
         tradePair = res?.data?.length ? res.data : [];
         tradePair = tradePair.map((tradePairs: any) => {
           tradePairs.url = logoMaps[tradePairs?.tradeVolumeCurrency];
           tradePairs.code = tradePairs?.tradeVolumeCurrency;
+          tradePairs.isNotification = notifications.includes(tradePairs?.tradeVolumeCurrency) || false;
           tradePairs.isBookmarked = bookmarks.includes(tradePairs?.tradeVolumeCurrency) || false;
           tradePairs.prices = formatMarketPrice(marketPricePairs[tradePairs?.tradeVolumeCurrency])
           return tradePairs;

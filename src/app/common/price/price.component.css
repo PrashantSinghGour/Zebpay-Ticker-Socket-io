@@ -45,6 +45,17 @@ tbody{
  fill: orange !important;
 }
 
+.notificaion-icon{
+  height: 0.9rem;
+  top:0;
+  position: absolute;
+}
+
+.notificaion-icon path {
+  fill: var(--text-black);
+}
+
+
 @media screen and (max-width: 425px) {
    tr td:first-child,
  tr th:first-child {
