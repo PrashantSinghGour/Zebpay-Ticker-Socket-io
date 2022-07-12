@@ -8,12 +8,16 @@ import { LoaderComponent } from './common/loader/loader.component';
 import { FormsModule } from '@angular/forms';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { ChartComponent } from './common/chart/chart.component';
+import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     PriceComponent,
-    LoaderComponent
+    LoaderComponent,
+    ChartComponent,
+    SafePipe
   ],
   imports: [
     BrowserModule,

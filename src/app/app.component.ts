@@ -9,6 +9,9 @@ import { logoMaps } from 'src/assets/logo-maps';
 import { formatMarketPrice } from './utils/formatter';
 import { initializeFirebase } from './utils/firebase';
 import { initializeNotification } from './services/service-worker';
+import { NavigationEnd, Router } from '@angular/router';
+import { get } from 'lodash';
+import { HapticService } from './services/haptic.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,12 +19,21 @@ import { initializeNotification } from './services/service-worker';
 })
 export class AppComponent {
   public isDark = false;
+  public isBackAllowed = false;
   constructor(
     private eventService: EventService,
     private httpClient: HttpClient,
     private mainService: MainService,
-    private theme: ThemeService
-  ) { }
+    private theme: ThemeService,
+    private haptic: HapticService,
+    public router: Router
+  ) {
+    router.events.subscribe((res) => {
+      if (res instanceof NavigationEnd) {
+        this.isBackAllowed = get(res, 'urlAfterRedirects', '').includes('chart');
+      }
+    });
+  }
 
   ngOnInit() {
     initializeNotification();
@@ -73,6 +85,11 @@ export class AppComponent {
           {}
         );
       });
+  }
+
+  backToHome() {
+    this.haptic.vibrate(50);
+    this.router.navigate(['home']);
   }
 
   changeThemeMode() {

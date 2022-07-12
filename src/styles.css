@@ -6,6 +6,10 @@ h5 {
   font-family: 'Barlow', sans-serif !important;
 }
 
+body {
+  background-color: var(--background-color) !important;
+}
+
 .backgroud {
   background-color: var(--background-color);
   overflow-x: auto;
@@ -44,6 +48,14 @@ td {
     z-index: 9999 !important;
 }
 
+.w-100vw {
+  width: 100vw !important;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
 @media screen and (max-width: 425px) {
   th,
   td {
@@ -61,7 +73,11 @@ td {
     text-align: center;
   }
 
-  svg {
+  .logo svg {
     width: 5rem !important;
   }
+
+.back-button svg {
+width: 1.5rem !important;
+}
 }

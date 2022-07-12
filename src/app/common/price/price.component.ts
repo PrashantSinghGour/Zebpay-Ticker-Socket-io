@@ -1,4 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EventService } from 'src/app/services/event.service';
 import { HapticService } from 'src/app/services/haptic.service';
@@ -23,7 +24,8 @@ export class PriceComponent implements OnInit, OnDestroy {
     private eventService: EventService,
     private mainService: MainService,
     private haptic: HapticService,
-    private loader: LoaderService
+    private loader: LoaderService,
+    private router: Router
   ) {
     this.getScreenSize();
   }
@@ -37,11 +39,18 @@ export class PriceComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loader.show();
     // all prices subscriptions
-    this.priceLoadedSubscription = this.eventService.subscribe(this.eventService.eventNames.TICKERVALUELOADED, () => {
+    if (this.mainService.tradePair.length) {
       this.prices = this.mainService.tradePair;
       this.sortPrices();
       this.loader.hide();
-    });
+    } else {
+      this.priceLoadedSubscription = this.eventService.subscribe(this.eventService.eventNames.TICKERVALUELOADED, () => {
+        this.prices = this.mainService.tradePair;
+        this.sortPrices();
+        this.loader.hide();
+      });
+    }
+
 
     const notification = NotificationUpdate.getInstance();
 
@@ -112,5 +121,10 @@ export class PriceComponent implements OnInit, OnDestroy {
   sortPrices() {
     this.prices = this.prices.sort((a, b) => b?.prices?.topBuy - a?.prices?.topBuy);
     this.prices = this.prices.sort((a, b) => b?.isBookmarked - a?.isBookmarked);
+  }
+
+  checkGraph(coinData: any) {
+    this.haptic.vibrate(50);
+    this.router.navigate(['/chart'], { queryParams: { pair: coinData.tradePairName } })
   }
 }

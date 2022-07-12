@@ -54,16 +54,25 @@ p {
   margin-right: 1rem;
 }
 
-svg {
+.logo svg {
   width: 10rem;
   height: auto;
   margin-left: 1rem;
 }
 
-svg g {
-  fill: var(--text-white);
+.logo svg g{
+  fill: white;
+}
+
+.back-button svg path{
+stroke: white;
+}
+
+.back-button svg {
+width: 2rem;
+margin-left: 1rem;
 }
 
 .brand {
-  color: var(--text-white) !important;
+  color: white !important;
 }

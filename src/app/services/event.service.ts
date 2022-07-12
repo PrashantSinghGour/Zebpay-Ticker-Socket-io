@@ -15,7 +15,8 @@ export class EventService {
   private handler = new Subject<Message>();
   public eventNames = {
     TICKERVALUELOADED: 'TICKERVALUELOADED',
-    TICKERVALUEUPDATED: 'TICKERVALUEUPDATED'
+    TICKERVALUEUPDATED: 'TICKERVALUEUPDATED',
+    THEMECHANGED: 'THEMECHANGED'
   };
 
   constructor() {

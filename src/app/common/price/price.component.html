@@ -49,7 +49,7 @@
         <td class="text-right" *ngIf="screenWidth && screenWidth > 425">{{ item?.prices?.low24hr | currency:
           'INR':'symbol':'1.0-9'
           }}</td>
-        <td class="text-green text-right ">
+        <td class="text-green text-right cursor-pointer" (click)="checkGraph(item)">
           {{ item?.prices?.topBuy | currency: 'INR':'symbol':'1.0-9' }}
         </td>
         <td class="text-red text-right">
