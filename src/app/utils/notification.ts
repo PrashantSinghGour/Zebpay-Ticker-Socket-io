@@ -23,11 +23,12 @@ export class NotificationUpdate {
     this.peakType = undefined;
     // this.peakType = 'High';
 
-    if (prices.high24hr === prices.topBuy) {
+    if (prices.high24hr <= prices.topBuy) {
       this.peakType = 'High';
-    } else if (prices.low24hr === prices.topBuy) {
+    } else if (prices.low24hr >= prices.topBuy) {
       this.peakType = 'Low';
     }
+
     if (this.peakType) {
       const currentTime = dayjs().format('YYYY-MM-DD hh:mm:ss');
       if (this.notificationMap[pairPrice.code] && !dayjs(currentTime).isAfter(this.notificationMap[pairPrice.code])) {
