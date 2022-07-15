@@ -41,7 +41,7 @@ export class NotificationUpdate {
 
       this.notificationMap = {
         ...this.notificationMap,
-        [pairPrice.code]: dayjs().add(1, 'minute').format('YYYY-MM-DD hh:mm:ss')
+        [pairPrice.code]: dayjs().add(3, 'minute').format('YYYY-MM-DD hh:mm:ss')
       }
     }
   }
