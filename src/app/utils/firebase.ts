@@ -11,7 +11,9 @@ const firebaseConfig = {
   measurementId: "G-K4565TPXJS"
 };
 
-
+/**
+ * @desc To initialize the firebase analytics
+ */
 const initializeFirebase = () => {
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);

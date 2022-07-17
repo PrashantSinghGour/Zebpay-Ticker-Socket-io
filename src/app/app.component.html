@@ -38,7 +38,7 @@
     </span>
 
     <!-- theme toggle checkbox starts here -->
-    <span class="mr1">
+    <span class="mr1 theme-selector">
       <input type="checkbox" id="checkbox" [(ngModel)]="isDark" (ngModelChange)="changeThemeMode()" />
       <label for="checkbox" class="label">
         <i class="fa fa-moon-o" aria-hidden="true"></i>
@@ -49,5 +49,7 @@
   </div>
   <!-- theme toggle checkbox ends here -->
 </div>
+
+<ngx-guided-tour></ngx-guided-tour>
 
 <router-outlet></router-outlet>

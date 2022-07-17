@@ -13,7 +13,8 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of prices; let i = index">
-        <td scope="row" class="text-center" [ngClass]="{'bookmarked': item?.isBookmarked}" (click)="setBookmark(i)">
+        <td scope="row" class="text-center bookmark-element" [ngClass]="{'bookmarked': item?.isBookmarked}"
+          (click)="setBookmark(i)">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <path d="M352 48H160a48 48 0 00-48 48v368l144-128 144 128V96a48 48 0 00-48-48z" fill="none"
               stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
@@ -49,8 +50,8 @@
         <td class="text-right" *ngIf="screenWidth && screenWidth > 425">{{ item?.prices?.low24hr | currency:
           'INR':'symbol':'1.0-9'
           }}</td>
-        <td class="text-green text-right cursor-pointer" (click)="checkGraph(item)">
-          {{ item?.prices?.topBuy | currency: 'INR':'symbol':'1.0-9' }}
+        <td class="text-green text-right cursor-pointer " (click)="checkGraph(item)">
+          <span class="buy-price-element">{{ item?.prices?.topBuy | currency: 'INR':'symbol':'1.0-9' }}</span>
         </td>
         <td class="text-red text-right">
           {{ item?.prices?.topSell | currency: 'INR':'symbol':'1.0-9' }}

@@ -10,7 +10,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ChartComponent } from './common/chart/chart.component';
 import { SafePipe } from './pipes/safe.pipe';
-
+import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,9 +29,10 @@ import { SafePipe } from './pipes/safe.pipe';
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    GuidedTourModule
   ],
-  providers: [],
+  providers: [GuidedTourService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

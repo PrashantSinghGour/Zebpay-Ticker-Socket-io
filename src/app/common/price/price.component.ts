@@ -33,7 +33,6 @@ export class PriceComponent implements OnInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
   getScreenSize(event?: any) {
     this.screenWidth = window.innerWidth;
-    console.log(this.screenWidth);
   }
 
   ngOnInit() {

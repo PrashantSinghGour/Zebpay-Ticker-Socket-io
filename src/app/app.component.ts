@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventService } from './services/event.service';
 import { MainService } from './services/main.service';
 import { ThemeService } from './services/theme.service';
@@ -12,21 +12,76 @@ import { initializeNotification } from './services/service-worker';
 import { NavigationEnd, Router } from '@angular/router';
 import { get } from 'lodash';
 import { HapticService } from './services/haptic.service';
+import { fromEvent, Subscription } from 'rxjs';
+import { GuidedTour, GuidedTourService, Orientation } from 'ngx-guided-tour';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   public isDark = false;
   public isBackAllowed = false;
+  public subscriptions: Subscription[] = [];
+  public applicationTour: GuidedTour = {
+    tourId: 'app-tour',
+    useOrb: false,
+    steps: [
+      {
+        title: 'Welcome to Zebpay Ticker',
+        content: 'This is the Zebpay application based price ticker for cryptocurrencies',
+        closeAction: () => {
+          console.log('process complete')
+        }
+      },
+      {
+        title: 'Theme',
+        content: 'You can switch the themes between Light Or Night mode.',
+        orientation: Orientation.Left,
+        selector: '.theme-selector',
+        closeAction: () => {
+          console.log('process complete')
+        }
+
+      },
+      {
+        title: 'Bookmark',
+        selector: '.bookmark-element',
+        content: 'You can bookmark your favorite coins.',
+        orientation: Orientation.Right,
+        closeAction: () => {
+          console.log('process complete')
+        }
+      },
+      {
+        title: 'Notification',
+        selector: '.coin-logo',
+        content: 'You can subscribe to notifications by clicking here for Upper and Lower thresholds, But for that you have to allow notification when asked by browser/app.',
+        orientation: Orientation.Right,
+        closeAction: () => {
+          console.log('process complete')
+        }
+      },
+      {
+        title: 'View Price Chart',
+        selector: '.buy-price-element',
+        content: 'By clicking here you can check the price chart for specific coin.',
+        orientation: Orientation.Bottom,
+        closeAction: () => {
+          console.log('process complete')
+        }
+      }
+    ]
+  };
+
   constructor(
     private eventService: EventService,
     private httpClient: HttpClient,
     private mainService: MainService,
     private theme: ThemeService,
     private haptic: HapticService,
-    public router: Router
+    public router: Router,
+    private guidedTourService: GuidedTourService
   ) {
     router.events.subscribe((res) => {
       if (res instanceof NavigationEnd) {
@@ -36,15 +91,80 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    // To mark tour as completed
+    this.subscriptions.push(this.guidedTourService.guidedTourCurrentStepStream.subscribe((data) => {
+      !data && localStorage.setItem('tour', 'completed');
+    }));
+
+    this.checkNetworkActivity();
+
     initializeNotification();
+
     initializeFirebase();
+
     const isDark: string = localStorage.getItem('isDark') || '';
     const isDarkTheme = isDark ? JSON.parse(isDark) : false;
     this.isDark = isDarkTheme;
     this.theme.setTheme(isDarkTheme);
+
     this.getPairs();
+
+    // To initiate a tour if it is not completed earlier
+    const isTourDone = localStorage.getItem('tour');
+    if (!isTourDone) {
+      this.initializeTour();
+    }
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+  /**
+   * @desc To check if app is connected to network or not i.e, `Online` or `Offline` 
+   */
+  checkNetworkActivity() {
+    const onlineEvent = fromEvent(window, 'online');
+    const offlineEvent = fromEvent(window, 'offline');
+
+    this.subscriptions.push(onlineEvent.subscribe(e => {
+      // handle online mode
+      this.getPairs();
+    }));
+
+    this.subscriptions.push(offlineEvent.subscribe(e => {
+      // handle offline mode
+    }));
+  }
+
+
+  /**
+   * @desc Provides the basic tour of app
+   */
+  initializeTour() {
+    setTimeout(() => {
+      this.guidedTourService.startTour(this.applicationTour);
+      setTimeout(() => {
+        const nextButtonEle = document.getElementsByClassName('next-button')[0];
+        const skipButtonEle = document.getElementsByClassName('skip-button')[0];
+        nextButtonEle.addEventListener('click', () => {
+          this.haptic.vibrate(50);
+          const backButtonEle = document.getElementsByClassName('back-button')[0];
+          backButtonEle.addEventListener('click', () => {
+            this.haptic.vibrate(50);
+          })
+        })
+        skipButtonEle.addEventListener('click', () => {
+          this.haptic.vibrate(50);
+        });
+      })
+    }, 1000);
+  }
+
+  /**
+   * @desc Fetch the data first time and register socket feeds
+   */
   getPairs() {
     let marketPricePairs: any = {}
     this.httpClient
