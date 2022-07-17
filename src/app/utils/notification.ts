@@ -23,9 +23,9 @@ export class NotificationUpdate {
     this.peakType = undefined;
     // this.peakType = 'High';
 
-    if (prices.high24hr <= prices.topBuy) {
+    if (Number(prices.high24hr) <= Number(prices.topBuy)) {
       this.peakType = 'High';
-    } else if (prices.low24hr === prices.topBuy || prices.low24hr > prices.topSell) {
+    } else if (Number(prices.low24hr) === Number(prices.topBuy) || Number(prices.low24hr) > Number(prices.topSell)) {
       this.peakType = 'Low';
     }
 

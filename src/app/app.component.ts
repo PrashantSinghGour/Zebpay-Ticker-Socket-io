@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EventService } from './services/event.service';
 import { MainService } from './services/main.service';
 import { ThemeService } from './services/theme.service';
@@ -17,7 +17,7 @@ import { HapticService } from './services/haptic.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public isDark = false;
   public isBackAllowed = false;
   constructor(
