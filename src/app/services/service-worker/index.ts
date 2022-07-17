@@ -49,4 +49,3 @@ const initializeNotification = async () => {
 
 export { initializeNotification, showLocalNotification };
 
-console.log(Notification.permission)

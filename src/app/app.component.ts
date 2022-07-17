@@ -29,47 +29,32 @@ export class AppComponent implements OnInit, OnDestroy {
     steps: [
       {
         title: 'Welcome to Zebpay Ticker',
-        content: 'This is the Zebpay application based price ticker for cryptocurrencies',
-        closeAction: () => {
-          console.log('process complete')
-        }
+        content: 'This is the Zebpay application based price ticker for cryptocurrencies'
       },
       {
         title: 'Theme',
         content: 'You can switch the themes between Light Or Night mode.',
         orientation: Orientation.Left,
-        selector: '.theme-selector',
-        closeAction: () => {
-          console.log('process complete')
-        }
+        selector: '.theme-selector'
 
       },
       {
         title: 'Bookmark',
         selector: '.bookmark-element',
         content: 'You can bookmark your favorite coins.',
-        orientation: Orientation.Right,
-        closeAction: () => {
-          console.log('process complete')
-        }
+        orientation: Orientation.Right
       },
       {
         title: 'Notification',
         selector: '.coin-logo',
         content: 'You can subscribe to notifications by clicking here for Upper and Lower thresholds, But for that you have to allow notification when asked by browser/app.',
-        orientation: Orientation.Right,
-        closeAction: () => {
-          console.log('process complete')
-        }
+        orientation: Orientation.Right
       },
       {
         title: 'View Price Chart',
         selector: '.buy-price-element',
         content: 'By clicking here you can check the price chart for specific coin.',
-        orientation: Orientation.Bottom,
-        closeAction: () => {
-          console.log('process complete')
-        }
+        orientation: Orientation.Bottom
       }
     ]
   };
