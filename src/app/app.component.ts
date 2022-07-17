@@ -84,8 +84,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.checkNetworkActivity();
 
-    initializeNotification();
-
     initializeFirebase();
 
     const isDark: string = localStorage.getItem('isDark') || '';

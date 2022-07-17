@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { EventService } from 'src/app/services/event.service';
 import { HapticService } from 'src/app/services/haptic.service';
 import { MainService } from 'src/app/services/main.service';
+import { initializeNotification } from 'src/app/services/service-worker';
 import { coinNameFormat } from 'src/app/utils/formatter';
 import { NotificationUpdate } from 'src/app/utils/notification';
 import { logoMaps } from 'src/assets/logo-maps';
@@ -84,6 +85,9 @@ export class PriceComponent implements OnInit, OnDestroy {
   }
 
   toggleNotification(index: number) {
+    if (Notification.permission !== 'granted') {
+      initializeNotification();
+    }
     this.haptic.vibrate(50);
     let notifications: string[] = [];
     this.prices[index].isNotification = !this.prices[index].isNotification;
