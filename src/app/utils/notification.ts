@@ -15,7 +15,7 @@ export class NotificationUpdate {
   }
 
   public checkPeaks(pairPrice: any) {
-    const subscribedCoins: string[] = JSON.parse(localStorage.getItem('notifications') || '');
+    const subscribedCoins: string[] = JSON.parse(localStorage.getItem('notifications') || '[]');
     if (!subscribedCoins.includes(pairPrice?.code)) {
       return;
     }

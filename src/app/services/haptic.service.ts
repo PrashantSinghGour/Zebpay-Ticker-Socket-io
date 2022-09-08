@@ -16,6 +16,10 @@ export class HapticService {
       console.error("Vibration API unavailable for this device");
       return;
     }
-    window.navigator.vibrate([timeInMillisecond]);
+    try {
+      window.navigator.vibrate([timeInMillisecond]);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }

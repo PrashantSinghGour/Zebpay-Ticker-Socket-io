@@ -101,7 +101,7 @@ export class PriceComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     const _that: any = this;
-    ['priceLoadedSubscription', 'priceUpdateSubscription'].forEach((subscription: string) => {
+    ['priceLoadedSubscription'].forEach((subscription: string) => {
       if (_that[subscription]) {
         (_that[subscription] as Subscription).unsubscribe();
       }
