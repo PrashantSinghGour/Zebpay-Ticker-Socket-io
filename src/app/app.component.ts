@@ -14,6 +14,7 @@ import { get } from 'lodash';
 import { HapticService } from './services/haptic.service';
 import { fromEvent, Subscription } from 'rxjs';
 import { GuidedTour, GuidedTourService, Orientation } from 'ngx-guided-tour';
+import { BackendPush } from './utils/backend-push';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -85,6 +86,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.checkNetworkActivity();
 
     initializeFirebase();
+
+    {
+      const backendPush = new BackendPush();
+      backendPush.requestPermission();
+      backendPush.listen();
+    }
 
     const isDark: string = localStorage.getItem('isDark') || '';
     const isDarkTheme = isDark ? JSON.parse(isDark) : false;

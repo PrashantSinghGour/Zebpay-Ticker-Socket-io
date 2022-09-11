@@ -47,5 +47,5 @@ const initializeNotification = async () => {
 }
 
 
-export { initializeNotification, showLocalNotification };
+export { initializeNotification, showLocalNotification, registerServiceWorker };
 
