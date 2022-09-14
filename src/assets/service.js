@@ -30,6 +30,8 @@ messaging.onBackgroundMessage(function (payload) {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
+    icon: 'https://zebpay-ticker.web.app/assets/icons/icon-48x48.png',
+    tag: 'Zebpay'
   };
 
   self.registration.showNotification(notificationTitle,
