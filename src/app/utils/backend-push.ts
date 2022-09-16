@@ -1,8 +1,18 @@
+import { Injectable } from "@angular/core";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { environment } from "src/environments/environment";
+import { DeviceRegistrationService } from "../services/device-registration.service";
+import { MainService } from "../services/main.service";
 import { registerServiceWorker, showLocalNotification } from "../services/service-worker";
+
+@Injectable({
+  providedIn: 'root'
+})
 export class BackendPush {
-  constructor() { }
+  constructor(
+    private mainService: MainService,
+    private devReg: DeviceRegistrationService
+  ) { }
 
 
   async requestPermission() {
@@ -12,8 +22,8 @@ export class BackendPush {
       { vapidKey: environment.firebase.vapidKey, serviceWorkerRegistration: swReg }).then(
         (currentToken) => {
           if (currentToken) {
-            console.log("Hurraaa!!! we got the token.....");
-            console.log(currentToken);
+            this.devReg.setDeviceReg(currentToken);
+            this.mainService.deviceRegId = currentToken;
           } else {
             console.log('No registration token available. Request permission to generate one.');
           }
@@ -26,7 +36,6 @@ export class BackendPush {
     onMessage(messaging, ({ notification }) => {
 
       showLocalNotification(notification?.title, notification?.body);
-      console.log('Message received. ', notification);
     });
   }
 }

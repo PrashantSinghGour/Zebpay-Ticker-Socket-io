@@ -66,7 +66,7 @@ export class PriceComponent implements OnInit, OnDestroy {
           this.prices[exist] = {
             ...this.prices[exist],
             code,
-            url: logoMaps[code],
+            url: `https://static.zebpay.com/multicoins/v3/blue/${(code as string).toLocaleLowerCase()}.png`,
             prices: res.data,
 
           };
@@ -74,7 +74,7 @@ export class PriceComponent implements OnInit, OnDestroy {
           this.prices.push({
             code,
             isBookmarked: false,
-            url: logoMaps[code],
+            url: `https://static.zebpay.com/multicoins/v3/blue/${(code as string).toLocaleLowerCase()}.png`,
             prices: res.data,
           });
         }

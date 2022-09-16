@@ -3,12 +3,14 @@
     <thead>
       <tr>
         <th scope="col"></th>
-        <th scope="col" class="text-right">Name</th>
-        <th scope="col" class="text-right" *ngIf="screenWidth && screenWidth > 425">High</th>
-        <th scope="col" class="text-right" *ngIf="screenWidth && screenWidth > 425">Low</th>
-        <th scope="col" class="text-right" *ngIf="screenWidth && screenWidth <= 425">High / Low</th>
-        <th scope="col" class="text-right">Buy</th>
-        <th scope="col" class="text-right">Sell</th>
+        <th scope="col" class="text-right text-muted">Name</th>
+        <th scope="col" class="text-right text-muted" *ngIf="screenWidth && screenWidth > 425">High</th>
+        <th scope="col" class="text-right text-muted" *ngIf="screenWidth && screenWidth > 425">Low</th>
+        <th scope="col" class="text-right text-muted" *ngIf="screenWidth && screenWidth <= 425">High / Low</th>
+        <th scope="col" class="text-right text-muted" *ngIf="screenWidth && screenWidth > 425">Buy</th>
+        <th scope="col" class="text-right text-muted" *ngIf="screenWidth && screenWidth > 425">Sell</th>
+        <th scope="col" class="text-right text-muted" *ngIf="screenWidth && screenWidth <= 425">Buy / Sell</th>
+        <th scope="col" class="text-right text-muted">Change</th>
       </tr>
     </thead>
     <tbody>
@@ -35,12 +37,20 @@
 
         <td *ngIf="screenWidth && screenWidth <= 425">
           <span class="d-flex flex-column justify-content-center">
-            <span class="mb-1">{{ item?.prices?.high24hr | currency:
+            <span class="mb-1 text-right">{{ item?.prices?.high24hr | currency:
               'INR':'symbol':'1.0-9'
               }}</span>
-            <span class="mt-1">{{ item?.prices?.low24hr | currency:
+            <span class="mt-1 text-right">{{ item?.prices?.low24hr | currency:
               'INR':'symbol':'1.0-9'
               }}</span>
+          </span>
+        </td>
+
+        <td *ngIf="screenWidth && screenWidth <= 425" (click)="checkGraph(item)">
+          <span class="d-flex flex-column justify-content-center">
+            <span class="mb-1 text-right text-green">{{ item?.prices?.topBuy | currency: 'INR':'symbol':'1.0-9'
+              }}</span>
+            <span class="mt-1 text-right text-red">{{ item?.prices?.topSell | currency: 'INR':'symbol':'1.0-9' }}</span>
           </span>
         </td>
 
@@ -50,11 +60,19 @@
         <td class="text-right" *ngIf="screenWidth && screenWidth > 425">{{ item?.prices?.low24hr | currency:
           'INR':'symbol':'1.0-9'
           }}</td>
-        <td class="text-green text-right cursor-pointer " (click)="checkGraph(item)">
+        <td class="text-green text-right cursor-pointer" (click)="checkGraph(item)"
+          *ngIf="screenWidth && screenWidth > 425">
           <span class="buy-price-element">{{ item?.prices?.topBuy | currency: 'INR':'symbol':'1.0-9' }}</span>
         </td>
-        <td class="text-red text-right">
+        <td class="text-red text-right" *ngIf="screenWidth && screenWidth > 425">
           {{ item?.prices?.topSell | currency: 'INR':'symbol':'1.0-9' }}
+        </td>
+        <td>
+          <span class="d-flex justify-content-end">
+            <span class="mb-1 text-right text-primary">{{ (item?.prices?.high24hr - item?.prices?.low24hr) | currency:
+              'INR':'symbol':'1.0-9'}}</span>
+
+          </span>
         </td>
       </tr>
     </tbody>

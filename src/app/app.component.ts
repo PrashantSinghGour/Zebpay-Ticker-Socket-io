@@ -67,7 +67,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private theme: ThemeService,
     private haptic: HapticService,
     public router: Router,
-    private guidedTourService: GuidedTourService
+    private guidedTourService: GuidedTourService,
+    private bkPush: BackendPush
   ) {
     router.events.subscribe((res) => {
       if (res instanceof NavigationEnd) {
@@ -85,12 +86,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.checkNetworkActivity();
 
-    initializeFirebase();
-
-    {
-      const backendPush = new BackendPush();
-      backendPush.requestPermission();
-      backendPush.listen();
+    this.mainService.firebaseInstance = initializeFirebase();
+    try {
+      const uid = localStorage.getItem('uId');
+      if (!uid) {
+        this.bkPush.requestPermission();
+      }
+      this.bkPush.listen();
+    } catch (e) {
+      console.error(e);
     }
 
     const isDark: string = localStorage.getItem('isDark') || '';
@@ -171,7 +175,7 @@ export class AppComponent implements OnInit, OnDestroy {
         let notifications: string[] = JSON.parse(localStorage.getItem('notifications') || '[]');
         tradePair = res?.data?.length ? res.data : [];
         tradePair = tradePair.map((tradePairs: any) => {
-          tradePairs.url = logoMaps[tradePairs?.tradeVolumeCurrency];
+          tradePairs.url = `https://static.zebpay.com/multicoins/v3/blue/${(tradePairs?.tradeVolumeCurrency as string).toLocaleLowerCase()}.png`;
           tradePairs.code = tradePairs?.tradeVolumeCurrency;
           tradePairs.isNotification = notifications.includes(tradePairs?.tradeVolumeCurrency) || false;
           tradePairs.isBookmarked = bookmarks.includes(tradePairs?.tradeVolumeCurrency) || false;
