@@ -53,7 +53,7 @@ export class PriceComponent implements OnInit, OnDestroy {
     }
 
 
-    const notification = NotificationUpdate.getInstance();
+    // const notification = NotificationUpdate.getInstance();
 
     // prices update subscriptions
     this.priceUpdateSubscription = this.eventService.subscribe(
@@ -79,7 +79,7 @@ export class PriceComponent implements OnInit, OnDestroy {
             prices: res.data,
           });
         }
-        notification.checkPeaks(this.prices[exist]);
+        // notification.checkPeaks(this.prices[exist]);
         this.sortPrices();
       }
     );
