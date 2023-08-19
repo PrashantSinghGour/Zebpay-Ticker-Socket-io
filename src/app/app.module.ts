@@ -11,6 +11,7 @@ import { environment } from '../environments/environment';
 import { ChartComponent } from './common/chart/chart.component';
 import { SafePipe } from './pipes/safe.pipe';
 import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +31,7 @@ import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
-    GuidedTourModule
+    GuidedTourModule,
   ],
   providers: [GuidedTourService],
   bootstrap: [AppComponent]

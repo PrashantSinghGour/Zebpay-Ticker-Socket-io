@@ -1,5 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { addDoc, collection, doc, DocumentData, DocumentReference, getDocs, getFirestore, updateDoc } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
 import { EventService } from 'src/app/services/event.service';
 import { HapticService } from 'src/app/services/haptic.service';
@@ -52,7 +53,7 @@ export class PriceComponent implements OnInit, OnDestroy {
     }
 
 
-    const notification = NotificationUpdate.getInstance();
+    // const notification = NotificationUpdate.getInstance();
 
     // prices update subscriptions
     this.priceUpdateSubscription = this.eventService.subscribe(
@@ -66,7 +67,7 @@ export class PriceComponent implements OnInit, OnDestroy {
           this.prices[exist] = {
             ...this.prices[exist],
             code,
-            url: logoMaps[code],
+            url: `https://static.zebpay.com/multicoins/v3/blue/${(code as string).toLocaleLowerCase()}.png`,
             prices: res.data,
 
           };
@@ -74,11 +75,11 @@ export class PriceComponent implements OnInit, OnDestroy {
           this.prices.push({
             code,
             isBookmarked: false,
-            url: logoMaps[code],
+            url: `https://static.zebpay.com/multicoins/v3/blue/${(code as string).toLocaleLowerCase()}.png`,
             prices: res.data,
           });
         }
-        notification.checkPeaks(this.prices[exist]);
+        // notification.checkPeaks(this.prices[exist]);
         this.sortPrices();
       }
     );
@@ -97,6 +98,7 @@ export class PriceComponent implements OnInit, OnDestroy {
       }
     });
     localStorage.setItem('notifications', JSON.stringify(notifications));
+    this.addNotificationToServer()
   }
 
   ngOnDestroy(): void {
@@ -129,5 +131,40 @@ export class PriceComponent implements OnInit, OnDestroy {
   checkGraph(coinData: any) {
     this.haptic.vibrate(50);
     this.router.navigate(['/chart'], { queryParams: { pair: coinData.tradePairName } })
+  }
+
+  addNotificationToServer() {
+    const notification = JSON.parse(localStorage.getItem('notifications') || '[]');
+    const app = this.mainService.firebaseInstance;
+    const fireStore = getFirestore(app);
+    const uniqueId = localStorage.getItem('uId');
+    const collectionName = 'Notification';
+
+    getDocs(collection(fireStore, collectionName))
+      .then((response) => {
+        const data = [...response.docs.map((item) => {
+          return { ...item.data(), id: item.id }
+        })];
+        const device: any = data.find((devices: any) => devices.deviceId === uniqueId);
+        let promise: Promise<void> | Promise<DocumentReference<DocumentData>>;
+        if (device && Object.keys(device).length) {
+          const dataToUpdate = doc(fireStore, collectionName, device.id);
+          promise = updateDoc(dataToUpdate, {
+            deviceId: uniqueId,
+            notifyTo: notification
+          })
+        } else {
+          promise = addDoc(collection(fireStore, collectionName), {
+            deviceId: uniqueId,
+            notifyTo: notification
+          });
+        }
+
+        promise.then(() => console.log('Data Sent!')).catch((err) => console.error(err));
+
+      }).catch((err: any) => {
+        console.error(err);
+      });
+
   }
 }
