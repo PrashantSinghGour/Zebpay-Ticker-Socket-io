@@ -8,7 +8,6 @@ import { MainService } from 'src/app/services/main.service';
 import { initializeNotification } from 'src/app/services/service-worker';
 import { coinNameFormat } from 'src/app/utils/formatter';
 import { NotificationUpdate } from 'src/app/utils/notification';
-import { logoMaps } from 'src/assets/logo-maps';
 import { LoaderService } from '../loader/loader.service';
 
 @Component({
@@ -67,7 +66,6 @@ export class PriceComponent implements OnInit, OnDestroy {
           this.prices[exist] = {
             ...this.prices[exist],
             code,
-            url: `https://static.zebpay.com/multicoins/v3/blue/${(code as string).toLocaleLowerCase()}.png`,
             prices: res.data,
 
           };
@@ -75,7 +73,6 @@ export class PriceComponent implements OnInit, OnDestroy {
           this.prices.push({
             code,
             isBookmarked: false,
-            url: `https://static.zebpay.com/multicoins/v3/blue/${(code as string).toLocaleLowerCase()}.png`,
             prices: res.data,
           });
         }

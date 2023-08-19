@@ -3,18 +3,18 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventService } from './services/event.service';
 import { MainService } from './services/main.service';
 import { ThemeService } from './services/theme.service';
-import { keyBy } from 'lodash';
+import { isArray, keyBy } from 'lodash';
 import { Feeds } from './utils/feeds';
-import { logoMaps } from 'src/assets/logo-maps';
 import { formatMarketPrice } from './utils/formatter';
 import { initializeFirebase } from './utils/firebase';
 import { initializeNotification } from './services/service-worker';
 import { NavigationEnd, Router } from '@angular/router';
 import { get } from 'lodash';
 import { HapticService } from './services/haptic.service';
-import { fromEvent, Subscription } from 'rxjs';
+import { firstValueFrom, fromEvent, Subscription } from 'rxjs';
 import { GuidedTour, GuidedTourService, Orientation } from 'ngx-guided-tour';
 import { BackendPush } from './utils/backend-push';
+import { coinList } from 'src/assets/logo-maps';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -159,27 +159,35 @@ export class AppComponent implements OnInit, OnDestroy {
   /**
    * @desc Fetch the data first time and register socket feeds
    */
-  getPairs() {
-    let marketPricePairs: any = {}
-    this.httpClient
-      .get('https://www.zebapi.com/pro/v1/market')
-      .toPromise().then((res: any) => {
-        res = res && res.length && res.filter((price: any) => price?.currency === 'INR' && +price?.buy);
-        marketPricePairs = keyBy(res, 'virtualCurrency');
-        return this.httpClient
-          .get('https://www.zebapi.com/api/v1/tradepairs/IN')
-          .toPromise();
-      }).then((res: any) => {
+  async getPairs() {
+    // market price data
+    let marketPricePairs: any = {};
+    const market = await firstValueFrom(this.httpClient.get('https://www.zebapi.com/pro/v1/market'));
+    const marketFilteredWithINR: any = market && isArray(market) && market.length && market.filter((price: any) => price?.currency === 'INR' && +price?.buy);
+    marketPricePairs = keyBy(marketFilteredWithINR, 'virtualCurrency');
+
+
+    // other  coin related data
+
+    const coinListByCode = keyBy(
+      coinList,
+      'currencySymbol'
+    );
+
+    const tradePairData: any = await firstValueFrom(this.httpClient.get('https://www.zebapi.com/api/v1/tradepairs/IN'));
         let tradePair: any[] = [];
         let bookmarks: string[] = JSON.parse(localStorage.getItem('bookmarks') || '[]');
         let notifications: string[] = JSON.parse(localStorage.getItem('notifications') || '[]');
-        tradePair = res?.data?.length ? res.data : [];
+    tradePair = tradePairData?.data?.length ? tradePairData.data : [];
         tradePair = tradePair.map((tradePairs: any) => {
-          tradePairs.url = `https://static.zebpay.com/multicoins/v3/blue/${(tradePairs?.tradeVolumeCurrency as string).toLocaleLowerCase()}.png`;
+          tradePairs.url = coinListByCode[tradePairs?.tradeVolumeCurrency]?.iconV3Blue;
+          tradePairs.iconV3White = coinListByCode[tradePairs?.tradeVolumeCurrency]?.iconV3White;
+          tradePairs.iconV3Blue = coinListByCode[tradePairs?.tradeVolumeCurrency]?.iconV3Blue;
           tradePairs.code = tradePairs?.tradeVolumeCurrency;
           tradePairs.isNotification = notifications.includes(tradePairs?.tradeVolumeCurrency) || false;
           tradePairs.isBookmarked = bookmarks.includes(tradePairs?.tradeVolumeCurrency) || false;
           tradePairs.prices = formatMarketPrice(marketPricePairs[tradePairs?.tradeVolumeCurrency])
+          tradePairs.fullName = coinListByCode[tradePairs?.tradeVolumeCurrency]?.fullName
           return tradePairs;
         });
 
@@ -198,7 +206,6 @@ export class AppComponent implements OnInit, OnDestroy {
           this.eventService.eventNames.TICKERVALUELOADED,
           {}
         );
-      });
   }
 
   backToHome() {

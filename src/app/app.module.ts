@@ -11,6 +11,8 @@ import { environment } from '../environments/environment';
 import { ChartComponent } from './common/chart/chart.component';
 import { SafePipe } from './pipes/safe.pipe';
 import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
+import { PacificGridComponent } from './lib/pacific-grid/pacific-grid.component';
+import { PriceV2Component } from './common/price-v2/price-v2.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
     PriceComponent,
     LoaderComponent,
     ChartComponent,
-    SafePipe
+    SafePipe,
+    PacificGridComponent,
+    PriceV2Component
   ],
   imports: [
     BrowserModule,

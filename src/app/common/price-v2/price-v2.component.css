@@ -1,0 +1,24 @@
+.denomination {
+  font-size: 0.75rem;
+  font-weight: 300;
+  position: relative;
+  top: -2px;
+}
+
+td {
+  font-weight: 500;
+  font-family: 'Barlow', sans-serif !important;
+}
+
+.coin-logo {
+  height: 1.6rem;
+  width: 1.6rem;
+  padding: 0.2rem;
+  border-radius: 0.75rem;
+  border: 2px solid white;
+  box-shadow: 0px 2px 3px 0px #888888;
+}
+
+.bookmarked svg path {
+  fill: orange !important;
+}

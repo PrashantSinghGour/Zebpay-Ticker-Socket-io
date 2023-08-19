@@ -1,0 +1,28 @@
+<div id="grid-conatiner" class="table-responsive">
+  <div class="bg-secondary p-1 bg-opacity-25 rounded">
+    <table class="table table-bordered">
+      <thead class="">
+        <tr>
+          <ng-container *ngIf="dataInStartHead"
+            [ngTemplateOutlet]="dataInStartHead"></ng-container>
+          <th *ngFor="let column of gridConfig?.columns">{{column?.label}}</th>
+        </tr>
+      </thead>
+      <tbody class="">
+        <tr *ngFor="let gridData of gridConfig?.data; let i = index;">
+          <ng-container *ngIf="dataInStartBody"
+            [ngTemplateOutlet]="dataInStartBody"
+            [ngTemplateOutletContext]="{item: gridData, index: i}"></ng-container>
+          <td *ngFor="let column of gridConfig?.columns"
+            [class]="column?.class">
+            <ng-container
+              *ngIf="column.type===columnType.Text">{{gridData?.[column?.name]}}</ng-container>
+            <ng-container
+              *ngIf="column.type===columnType.Currency">{{gridData?.[column?.name]
+              | currency: 'INR':'symbol':'1.0-9'}}</ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

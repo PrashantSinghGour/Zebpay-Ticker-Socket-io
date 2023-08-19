@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ChartComponent } from './common/chart/chart.component';
 import { PriceComponent } from './common/price/price.component';
+import { PriceV2Component } from './common/price-v2/price-v2.component';
 
 const routes: Routes = [
   {
@@ -9,12 +10,16 @@ const routes: Routes = [
     component: PriceComponent
   },
   {
+    path: 'home-v2',
+    component: PriceV2Component
+  },
+  {
     path: 'chart',
     component: ChartComponent
   },
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: '/home-v2',
     pathMatch: 'full'
   }
 ];

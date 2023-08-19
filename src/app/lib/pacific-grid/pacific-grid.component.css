@@ -1,0 +1,39 @@
+thead {
+  background: dodgerblue;
+  color: #fff;
+  border-radius: 5%;
+}
+
+th:not(:first-child),
+td:not(:first-child) {
+  border-left-style: hidden;
+}
+
+
+td {
+  vertical-align: middle;
+}
+
+table tbody {
+  display: block;
+  max-height: 75vh;
+  overflow-y: scroll;
+  background: var(--text-white);
+}
+
+table thead,
+table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  color: var(--text-black);
+}

@@ -1,6 +1,6 @@
 /* Add application styles & imports to this file! */
 @import '~font-awesome/css/font-awesome.css';
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@1,500;1,600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
 h5 {
   font-family: 'Barlow', sans-serif !important;
@@ -11,7 +11,23 @@ body {
 }
 
 
+::-webkit-scrollbar {
+  width: 0.2rem;
+}
 
+::-webkit-scrollbar-button {
+  background: #ccc
+}
+
+::-webkit-scrollbar-track-piece {
+  background: #888
+}
+
+::-webkit-scrollbar-thumb {
+  background: #eee
+}
+
+​
 
 .backgroud {
   background-color: var(--background-color);

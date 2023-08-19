@@ -1,0 +1,29 @@
+<div class="p-5">
+  <app-pacific-grid [gridConfig]="gridConfig" *ngIf="isGridVisible">
+    <ng-template #dataInStartHead>
+      <td class="text-center">Coin</td>
+    </ng-template>
+    <ng-template #dataInStartBody let-item="item" let-index="index">
+      <td>
+        <div class="row align-items-center">
+          <div class="col-2 me-1" (click)="setBookmark(index)"
+            [ngClass]="{'bookmarked': item?.isBookmarked}">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path
+                d="M352 48H160a48 48 0 00-48 48v368l144-128 144 128V96a48 48 0 00-48-48z"
+                fill="none" stroke="currentColor" stroke-linecap="round"
+                stroke-linejoin="round" stroke-width="32" />
+            </svg>
+          </div>
+          <div class="col-2 text-center">
+            <img [src]="item?.url" [alt]="item?.name" class="coin-logo ">
+          </div>
+          <div class="col-6">{{item.name}} <div class="denomination d-inline"> |
+              {{item?.tradeDenominationCurrency}}</div>
+            <div>{{item?.fullName}}</div>
+          </div>
+        </div>
+      </td>
+    </ng-template>
+  </app-pacific-grid>
+</div>
